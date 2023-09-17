@@ -18,3 +18,8 @@ steps:
   displayName: 'Use .NET SDK $(dotnetSdkVersion)'
 
 # Rest of your steps remain the same as in the previous YAML script
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
