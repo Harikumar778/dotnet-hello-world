@@ -4,22 +4,24 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-variables:
-  solution: '**/*.sln'
-  buildConfiguration: 'Release'
-  dotnetSdkVersion: '3.1.x'
-
 steps:
+- script: 'dotnet build'
+  displayName: 'Build'
+
+- script: 'dotnet pack --configuration Release'
+  displayName: 'Pack'
+
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '$(dotnetSdkVersion)'
+    version: '3.1.x'  # Replace with the version you are using
     installationPath: $(Agent.ToolsDirectory)/dotnet
-  displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+  displayName: 'Use .NET SDK 3.1.x'
 
-# Rest of your steps remain the same as in the previous YAML script
-- task: PublishBuildArtifacts@1
+- task: NuGetAuthenticate@0
+  displayName: 'NuGet Authenticate'
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+    nuGetServiceConnections: 'dotnetImage'  # Replace with your service connection name
+
+- script: 'dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/harikumarpeddakotla7/PipelinetoAWS/_packaging/dotnetImage/nuget/v3/index.json" --api-key $(System.AccessToken)'
+  displayName: 'Push NuGet package to Azure Artifacts'
