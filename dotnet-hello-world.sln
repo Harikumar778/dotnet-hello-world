@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hello-world-api", "hello-world-api\hello-world-api.csproj", "{3FFEDBC1-AC8B-4820-A349-942B05498238}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipelinetoAWS", "PipelinetoAWS\Harikumar778.dotnet-hello-world.csproj", "{3FFEDBC1-AC8B-4820-A349-942B05498238}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
