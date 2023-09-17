@@ -1,0 +1,40 @@
+trigger:
+- main # You can change this to the branch you want to trigger the pipeline on
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  solution: '**/*.sln' # This assumes your solution file is in the root of your repo
+  buildConfiguration: 'Release'
+  dotnetSdkVersion: '3.1.x' # Update this to the .NET SDK version you want to use
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '$(dotnetSdkVersion)'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+  displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+
+- script: dotnet restore $(solution)
+  displayName: 'Restore NuGet packages'
+
+- script: dotnet build $(solution) --configuration $(buildConfiguration)
+  displayName: 'Build the project'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: false
+  displayName: 'Publish the project'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: 'drop'
+  displayName: 'Publish Artifact'
+
+# Add additional steps for deployment if needed
