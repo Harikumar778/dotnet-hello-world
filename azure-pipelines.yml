@@ -18,5 +18,5 @@ steps:
     installationPath: $(Agent.ToolsDirectory)/dotnet
   displayName: 'Use .NET SDK 3.1.x'
 
-- script: 'dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source $(NuGetServiceConnectionSource) --api-key $(NuGetServiceConnectionApiKey)'
+- script: 'dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source $(Nuget) --api-key $(apikeyy)'
   displayName: 'Push NuGet package to Azure Artifacts'
